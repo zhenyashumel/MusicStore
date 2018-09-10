@@ -11,31 +11,35 @@ namespace MusicStore.BLL.Services
     public class AlbumService : ICRUDService<AlbumDTO>
     {
         private IUnitOfWork db;
-        public AlbumService(IUnitOfWork uof)
-        {
-            db = uof;
-        }
+        private IMapper _albumToDtoMapper;
+        private IMapper _dtoToAlbumMapper;
 
+        public AlbumService(IUnitOfWork uow)
+        {
+            db = uow;
+            _albumToDtoMapper = new MapperConfiguration(cfg => cfg.CreateMap<Album, AlbumDTO>()).CreateMapper();
+            _dtoToAlbumMapper = new MapperConfiguration(cfg => cfg.CreateMap<AlbumDTO, Album>()).CreateMapper();
+           
+        }
         public void Create(AlbumDTO item)
         {
-            throw new NotImplementedException();
+            db.Albums.Create(_dtoToAlbumMapper.Map<AlbumDTO, Album>(item));
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            db.Songs.Delete(id);
         }
 
         public AlbumDTO Get(int id)
         {
-            throw new NotImplementedException();
+            return _albumToDtoMapper.Map<Album, AlbumDTO>(db.Albums.Get(id));
         }
 
         public IEnumerable<AlbumDTO> GetAll()
         {
-            var alb = db.Albums.GetAll();
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Album, AlbumDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Album>, IEnumerable<AlbumDTO>>(alb);
+            var albums = db.Albums.GetAll();
+            return _albumToDtoMapper.Map<IEnumerable<Album>, IEnumerable<AlbumDTO>>(albums);
         }
 
         public void Update(AlbumDTO item)
