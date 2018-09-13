@@ -4,7 +4,7 @@ using System;
 
 namespace MusicStore.DAL.EF
 {
-    public class MusicStoreDatabaseInitializer : DropCreateDatabaseAlways<MusicStoreContext>
+    public class MusicStoreDatabaseInitializer : DropCreateDatabaseIfModelChanges<MusicStoreContext>
     {
         protected override void Seed(MusicStoreContext context)
         {
@@ -17,8 +17,7 @@ namespace MusicStore.DAL.EF
                 Photo = "",
                 Bio = "American industrial-rock singer"
             };
-            context.Author.Add(marilynManson);
-            context.SaveChanges();
+           
 
             Album goldenAge = new Album()
             {
@@ -27,8 +26,7 @@ namespace MusicStore.DAL.EF
                 Title = "Golden Age of GroteSque"
             };
 
-            context.Albums.Add(goldenAge);
-            context.SaveChanges();
+           
 
             Song thaeter = new Song()
             {
@@ -48,7 +46,9 @@ namespace MusicStore.DAL.EF
                 Album = goldenAge
             };
 
+            context.Authors.Add(marilynManson);
             context.Songs.Add(thaeter);
+            context.Albums.Add(goldenAge);
             context.Songs.Add(gold);
             context.SaveChanges();
 

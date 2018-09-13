@@ -25,6 +25,5 @@ namespace MusicStore.DAL.Entities
         }
 
 
-
     }
 }

@@ -44,7 +44,7 @@ namespace MusicStore.BLL.Services
 
         public void Update(AlbumDTO item)
         {
-            throw new NotImplementedException();
+            db.Albums.Update(_dtoToAlbumMapper.Map<AlbumDTO, Album>(item));
         }
     }
 }
