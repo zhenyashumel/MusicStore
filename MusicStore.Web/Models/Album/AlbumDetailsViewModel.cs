@@ -1,19 +1,28 @@
-﻿using MusicStore.Web.Models.Author;
-using MusicStore.Web.Models.Song;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Web;
+using MusicStore.Web.Models.Author;
+using MusicStore.Web.Models.Song;
 
 namespace MusicStore.Web.Models.Album
 {
-    public class AlbumIndexViewModel
+    public class AlbumDetailsViewModel
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public AuthorAlbumViewModel Author { get; set; }
-        public ICollection<SongDetailsViewModel> Songs { get; set; }
-        [Display(Name ="Tracks")]
+        public int ReleasedYear { get; set; }
+
+        public int AuthorId { get; set; }
+        public AuthorDetailsViewModel Author { get; set; }
+
+        public virtual ICollection<SongDetailsViewModel> Songs { get; set; }
+        public AlbumDetailsViewModel()
+        {
+            Songs = new List<SongDetailsViewModel>();
+        }
+        [Display(Name = "Tracks")]
         public int SongsCount => Songs?.Count ?? 0;
         [Display(Name = "Duration")]
         public TimeSpan TotalDuration
@@ -28,6 +37,7 @@ namespace MusicStore.Web.Models.Album
         [Display(Name = "Price")]
         public double TotalPrice
         {
+        
             get
             {
                 if (Songs == null)
@@ -36,9 +46,6 @@ namespace MusicStore.Web.Models.Album
             }
         }
 
-        public AlbumIndexViewModel()
-        {
-            Songs = new List<SongDetailsViewModel>();
-        }
+        
     }
 }

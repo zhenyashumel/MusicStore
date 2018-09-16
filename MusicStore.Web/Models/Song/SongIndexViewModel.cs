@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MusicStore.Web.Models.Album;
+using MusicStore.Web.Models.Author;
 
 namespace MusicStore.Web.Models.Song
 {
-    public class SongAlbumViewModel
+    public class SongIndexViewModel
     {
         public int Id { get; set; }
         public string Title { get; set; }
         public TimeSpan Duration { get; set; }
         public double Price { get; set; }
 
+        public AuthorDetailsViewModel Author { get; set; }
+
+        public AlbumDetailsViewModel Album { get; set; }
     }
 }

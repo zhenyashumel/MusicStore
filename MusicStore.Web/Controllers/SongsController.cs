@@ -1,55 +1,52 @@
-﻿using AutoMapper;
-using MusicStore.BLL.DTO;
-using MusicStore.BLL.Interfaces;
-using MusicStore.Web.Models.Author;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
+using MusicStore.BLL.DTO;
+using MusicStore.BLL.Interfaces;
+using MusicStore.Web.Models.Album;
+using MusicStore.Web.Models.Song;
 
 namespace MusicStore.Web.Controllers
 {
-    public class AuthorsController : Controller
+    public class SongsController : Controller
     {
-        private IMusicService _service;
-        private IMapper _dtoToDetailsVm;
-        private IMapper _detailsVmToDTO;
+        IMusicService _service;
+        IMapper _dtoToIndexVm;
+        IMapper _indexVmToDTO;
 
-        private IMapper _dtoToIndexVm;
-        private IMapper _indexVmToDTO;
-
-
-        public AuthorsController(IMusicService service)
+        public SongsController(IMusicService service)
         {
             _service = service;
-            _dtoToDetailsVm = new MapperConfiguration(cfg => cfg.CreateMap<AuthorDTO,AuthorDetailsViewModel>()).CreateMapper();
-            _detailsVmToDTO = new MapperConfiguration(cfg => cfg.CreateMap<AuthorDetailsViewModel, AuthorDTO>()).CreateMapper();
-
-            _dtoToIndexVm = new MapperConfiguration(cfg => cfg.CreateMap<AuthorDTO, AuthorIndexViewModel>()).CreateMapper();
-            _indexVmToDTO = new MapperConfiguration(cfg => cfg.CreateMap<AuthorIndexViewModel, AuthorDTO>()).CreateMapper();
+            _dtoToIndexVm = new MapperConfiguration(cfg => cfg.CreateMap<SongDTO, SongIndexViewModel>()).CreateMapper();
+            _indexVmToDTO = new MapperConfiguration(cfg => cfg.CreateMap<SongIndexViewModel, SongDTO>()).CreateMapper();
         }
-        // GET: Authors
+
+
+        // GET: Songs
         public ActionResult Index()
         {
-            var authors = _dtoToIndexVm.Map<IEnumerable<AuthorDTO>,IEnumerable<AuthorIndexViewModel>>(_service.AuthorService.GetAll());
-            return View(authors);
+            var songs =
+                _dtoToIndexVm.Map<IEnumerable<SongDTO>, IEnumerable<SongIndexViewModel>>(_service.SongService.GetAll());
+            return View(songs);
         }
 
-        // GET: Authors/Details/5
+        // GET: Songs/Details/5
         public ActionResult Details(int id)
         {
-            var author = _dtoToDetailsVm.Map<AuthorDTO, AuthorDetailsViewModel>(_service.AuthorService.Get(id));
-            return View(author);
+            return View();
         }
 
-        // GET: Authors/Create
+        // GET: Songs/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Authors/Create
+        // POST: Songs/Create
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
@@ -65,13 +62,13 @@ namespace MusicStore.Web.Controllers
             }
         }
 
-        // GET: Authors/Edit/5
+        // GET: Songs/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: Authors/Edit/5
+        // POST: Songs/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -87,13 +84,13 @@ namespace MusicStore.Web.Controllers
             }
         }
 
-        // GET: Authors/Delete/5
+        // GET: Songs/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Authors/Delete/5
+        // POST: Songs/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {

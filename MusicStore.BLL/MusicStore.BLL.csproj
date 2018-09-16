@@ -65,13 +65,13 @@
     <Compile Include="Services\SongService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MusicStore.DAL\MusicStore.DAL.csproj">
       <Project>{a293cc17-c732-4678-880e-687ca210a2d3}</Project>
       <Name>MusicStore.DAL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

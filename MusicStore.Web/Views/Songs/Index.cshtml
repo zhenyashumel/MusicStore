@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MusicStore.Web.Models.Album.AlbumIndexViewModel>
+﻿@model IEnumerable<MusicStore.Web.Models.Song.SongIndexViewModel>
 
 @{
-    ViewBag.Title = "Albums";
+    ViewBag.Title = "Songs";
 }
 
-<h2>Albums</h2>
+<h2>Songs</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -15,16 +15,16 @@
             @Html.DisplayNameFor(model => model.Title)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Duration)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Author)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.SongsCount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TotalDuration)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TotalPrice)
+            @Html.DisplayNameFor(model => model.Album)
         </th>
         <th></th>
     </tr>
@@ -35,22 +35,22 @@
             @Html.DisplayFor(modelItem => item.Title)
         </td>
         <td>
-            @Html.ActionLink(item.Author.Nickname, "Details", "Authors", new { id = item.Author.Id }, null)
+            @Html.DisplayFor(modelItem => item.Duration)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.SongsCount)
+            @Html.DisplayFor(modelItem => item.Price)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TotalDuration)
+            @Html.DisplayFor(modelItem => item.Author.Nickname)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TotalPrice)
+            @Html.DisplayFor(modelItem => item.Album.Title)
         </td>
-        @*<td>
+        <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>*@
+        </td>
     </tr>
 }
 
