@@ -47,10 +47,10 @@
             @Html.DisplayFor(modelItem => item.Nickname)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.SongsCount)
-        </td>
+            @Html.ActionLink(item.SongsCount.ToString(), "SongList", "Songs", new { id = item.Id}, null)
+           </td>
         <td>
-            @Html.DisplayFor(modelItem => item.AlbumsCount)
+            @Html.ActionLink(item.AlbumsCount.ToString(), "AlbumsList", "Albums", new { id = item.Id }, null)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

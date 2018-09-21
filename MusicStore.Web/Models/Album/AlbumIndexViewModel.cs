@@ -11,7 +11,10 @@ namespace MusicStore.Web.Models.Album
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public int AuthorId { get; set; }
         public AuthorAlbumViewModel Author { get; set; }
+        public int ReleasedYear { get; set; }
+
         public ICollection<SongDetailsViewModel> Songs { get; set; }
         [Display(Name ="Tracks")]
         public int SongsCount => Songs?.Count ?? 0;

@@ -11,7 +11,9 @@ namespace MusicStore.Web.Models.Song
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public int AuthorId { get; set; }
         public AuthorDetailsViewModel Author { get; set; }
+        public int AlbumId { get; set; }
         public AlbumDetailsViewModel Album { get; set; }
         public TimeSpan Duration { get; set; }
         public double Price { get; set; }

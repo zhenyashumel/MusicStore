@@ -17,12 +17,13 @@ namespace MusicStore.Web.Controllers
         IMusicService _service;
         IMapper _dtoToIndexVm;
         IMapper _indexVmToDTO;
-
+        IMapper _dtoToDetailsVm;
         public SongsController(IMusicService service)
         {
             _service = service;
             _dtoToIndexVm = new MapperConfiguration(cfg => cfg.CreateMap<SongDTO, SongIndexViewModel>()).CreateMapper();
             _indexVmToDTO = new MapperConfiguration(cfg => cfg.CreateMap<SongIndexViewModel, SongDTO>()).CreateMapper();
+            _dtoToDetailsVm = new MapperConfiguration(cfg => cfg.CreateMap<SongDTO, SongDetailsViewModel>()).CreateMapper();
         }
 
 
@@ -33,7 +34,27 @@ namespace MusicStore.Web.Controllers
                 _dtoToIndexVm.Map<IEnumerable<SongDTO>, IEnumerable<SongIndexViewModel>>(_service.SongService.GetAll());
             return View(songs);
         }
+        public ActionResult Buy(int id, double price)
+        {
+            var order = new OrderDTO()
+            {
+                Date = DateTime.Now,
+                UserId = 0,
+                Description = "Some Text",
+                Songs = new List<SongDTO>() { _service.SongService.Get(id)},
+                
+            };
+            _service.OrderService.Create(order);
+            var songs =
+                _dtoToIndexVm.Map<IEnumerable<SongDTO>, IEnumerable<SongIndexViewModel>>(_service.SongService.GetAll());
+            return View("Index", songs);
 
+        }
+        public ActionResult SongList(int id)
+        {
+            var songs = _dtoToDetailsVm.Map<IEnumerable<SongDTO>, IEnumerable<SongDetailsViewModel>>(_service.AlbumService.Get(id).Songs);
+            return View(songs);
+        }
         // GET: Songs/Details/5
         public ActionResult Details(int id)
         {

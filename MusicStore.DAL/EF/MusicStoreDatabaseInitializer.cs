@@ -4,7 +4,7 @@ using System;
 
 namespace MusicStore.DAL.EF
 {
-    public class MusicStoreDatabaseInitializer : DropCreateDatabaseIfModelChanges<MusicStoreContext>
+    public class MusicStoreDatabaseInitializer: DropCreateDatabaseAlways<MusicStoreContext>
     {
         protected override void Seed(MusicStoreContext context)
         {
@@ -24,6 +24,7 @@ namespace MusicStore.DAL.EF
                 Author = marilynManson,
                 ReleasedYear = 2003,
                 Title = "Golden Age of GroteSque"
+                
             };
 
            
@@ -34,7 +35,8 @@ namespace MusicStore.DAL.EF
                 Author = marilynManson,
                 Duration = new TimeSpan(0, 1, 14),
                 Price = 5,
-                Title = "Thaeter"
+                Title = "Thaeter",
+                Album = goldenAge
             };
 
             Song gold = new Song()

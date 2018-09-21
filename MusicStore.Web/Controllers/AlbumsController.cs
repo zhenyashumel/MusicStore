@@ -2,11 +2,13 @@
 using MusicStore.BLL.DTO;
 using MusicStore.BLL.Interfaces;
 using MusicStore.Web.Models.Album;
+using MusicStore.Web.Models.Author;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MusicStore.Web.Models.Song;
 
 namespace MusicStore.Web.Controllers
 {
@@ -15,12 +17,21 @@ namespace MusicStore.Web.Controllers
         private IMusicService _service;
         private IMapper _dtoToIndexVm;
         private IMapper _indexVmToDTO;
+        private IMapper _dtoToDetailsVm;
+        private IMapper _authorDtoToAuthorVm;
+        private IMapper _songDtoToSongVm;
 
         public AlbumsController(IMusicService service)
         {
             _service = service;
+            _authorDtoToAuthorVm = new MapperConfiguration(cfg => cfg.CreateMap<AuthorDTO, AuthorAlbumViewModel>()).CreateMapper();
             _dtoToIndexVm = new MapperConfiguration(cfg => cfg.CreateMap<AlbumDTO, AlbumIndexViewModel>()).CreateMapper();
-            _indexVmToDTO = new MapperConfiguration(cfg => cfg.CreateMap<AlbumIndexViewModel, AlbumDTO>()).CreateMapper();
+            _indexVmToDTO = new MapperConfiguration(cfg => cfg.CreateMap<AlbumIndexViewModel, AlbumDTO>().
+                ForMember(el => el.Author, opt => opt.MapFrom(c => _service.AuthorService.Get(c.Author.Id)))).CreateMapper();
+            _dtoToDetailsVm = new MapperConfiguration(cfg => cfg.CreateMap<AlbumDTO, AlbumDetailsViewModel>()).CreateMapper();
+            _songDtoToSongVm = new MapperConfiguration(cfg => cfg.CreateMap<SongDTO, SongDetailsViewModel>()).CreateMapper();
+
+
         }
         // GET: Albums
         public ActionResult Index()
@@ -32,73 +43,75 @@ namespace MusicStore.Web.Controllers
         // GET: Albums/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var album = _dtoToDetailsVm.Map<AlbumDTO, AlbumDetailsViewModel>(_service.AlbumService.Get(id));
+
+            return View(album);
+        }
+
+        public ActionResult AlbumsList(int id)
+        {
+            var albums = _dtoToDetailsVm.Map<IEnumerable<AlbumDTO>, IEnumerable<AlbumDetailsViewModel>>(_service.AuthorService.Get(id).Albums);
+            return View(albums);
         }
 
         // GET: Albums/Create
         public ActionResult Create()
         {
+            ViewBag.Authors = _authorDtoToAuthorVm.Map<IEnumerable<AuthorDTO>, IEnumerable<AuthorIndexViewModel>>(_service.AuthorService.GetAll());
+
             return View();
         }
 
         // POST: Albums/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(AlbumIndexViewModel album)
         {
-            try
-            {
-                // TODO: Add insert logic here
+            album.Author =
+                _authorDtoToAuthorVm.Map<AuthorDTO, AuthorAlbumViewModel>(_service.AuthorService.Get(album.AuthorId));
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+
+            _service.AlbumService.Create(_indexVmToDTO.Map<AlbumIndexViewModel, AlbumDTO>(album));
+            var albums = _dtoToIndexVm.Map<IEnumerable<AlbumDTO>, IEnumerable<AlbumIndexViewModel>>(_service.AlbumService.GetAll());
+            return View("Index", albums);
+
         }
 
         // GET: Albums/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+
+            var album = _dtoToIndexVm.Map<AlbumDTO, AlbumIndexViewModel>(_service.AlbumService.Get(id));
+            ViewBag.Authors = _authorDtoToAuthorVm.Map<IEnumerable<AuthorDTO>, IEnumerable<AuthorIndexViewModel>>(_service.AuthorService.GetAll());
+            if (album != null)
+                return View(album);
+            var albums = _dtoToIndexVm.Map<IEnumerable<AlbumDTO>, IEnumerable<AlbumIndexViewModel>>(_service.AlbumService.GetAll());
+            return View("Index", albums);
         }
 
         // POST: Albums/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(AlbumIndexViewModel album)
         {
-            try
-            {
-                // TODO: Add update logic here
+            album.Author =
+                _authorDtoToAuthorVm.Map<AuthorDTO, AuthorAlbumViewModel>(_service.AuthorService.Get(album.AuthorId));
+            album.Songs = _songDtoToSongVm.Map<ICollection<SongDTO>, ICollection<SongDetailsViewModel>>(_service.AlbumService.Get(album.Id).Songs);
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+
+            _service.AlbumService.Update(_indexVmToDTO.Map<AlbumIndexViewModel, AlbumDTO>(album));
+
+            var albums = _dtoToIndexVm.Map<IEnumerable<AlbumDTO>, IEnumerable<AlbumIndexViewModel>>(_service.AlbumService.GetAll());
+            return View("Index", albums);
         }
 
         // GET: Albums/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            _service.AlbumService.Delete(id);
+
+            var albums = _dtoToIndexVm.Map<IEnumerable<AlbumDTO>, IEnumerable<AlbumIndexViewModel>>(_service.AlbumService.GetAll());
+            return View("Index", albums);
         }
 
-        // POST: Albums/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

@@ -23,9 +23,9 @@ namespace MusicStore.DAL.Repositories
 
         public void Delete(int id)
         {
-            var Order = db.Orders.Find(id);
-            if (Order != null)
-                db.Orders.Remove(Order);
+            var order = db.Orders.Find(id);
+            if (order != null)
+                db.Orders.Remove(order);
             db.SaveChanges();
 
         }

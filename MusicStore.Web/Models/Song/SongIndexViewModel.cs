@@ -14,8 +14,10 @@ namespace MusicStore.Web.Models.Song
         public TimeSpan Duration { get; set; }
         public double Price { get; set; }
 
+        public int AuthorId { get; set; }
         public AuthorDetailsViewModel Author { get; set; }
 
+        public int AlbumId { get; set; }
         public AlbumDetailsViewModel Album { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 
 namespace MusicStore.DAL.Entities
@@ -15,6 +16,14 @@ namespace MusicStore.DAL.Entities
 
         public int AlbumId { get; set; }
         public Album Album { get; set; }
+
+        public ICollection<Order> Orders { get; set; }
+
+        public Song()
+        {
+            Orders = new List<Order>();
+        }
+
 
     }
 }

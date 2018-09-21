@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MusicStore.Web.Models.Album.AlbumIndexViewModel>
+﻿@model IEnumerable<MusicStore.Web.Models.Album.AlbumDetailsViewModel>
 
 @{
     ViewBag.Title = "Albums";
 }
 
-<h2>Albums</h2>
+<h2>AlbumsList</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -13,6 +13,9 @@
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReleasedYear)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Author)
@@ -35,10 +38,13 @@
             @Html.DisplayFor(modelItem => item.Title)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.ReleasedYear)
+        </td>
+        <td>
             @Html.ActionLink(item.Author.Nickname, "Details", "Authors", new { id = item.Author.Id }, null)
         </td>
         <td>
-            @Html.ActionLink(item.SongsCount.ToString(), "SongList", "Songs", new { id = item.Id}, null)
+            @Html.ActionLink(item.SongsCount.ToString(), "SongList", "Songs", new { songs = item.Songs }, null)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.TotalDuration)

@@ -28,7 +28,7 @@ namespace MusicStore.BLL.Services
 
         public void Delete(int id)
         {
-            db.Songs.Delete(id);
+            db.Albums.Delete(id);
         }
 
         public AlbumDTO Get(int id)

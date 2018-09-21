@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MusicStore.DAL.Repositories
 {
-    public class AlbumRepository:IRepository<Album>
+    public class AlbumRepository : IRepository<Album>
     {
         private MusicStoreContext db;
         public AlbumRepository(MusicStoreContext context)
@@ -20,6 +20,8 @@ namespace MusicStore.DAL.Repositories
 
         public void Create(Album item)
         {
+            item.Author.Albums.Add(item);
+            item.Author = null;
             db.Albums.Add(item);
             db.SaveChanges();
         }
@@ -50,7 +52,11 @@ namespace MusicStore.DAL.Repositories
 
         public void Update(Album item)
         {
-            db.Entry(item).State = EntityState.Modified;
+            var album = db.Albums.Find(item.Id);
+
+            db.Entry(album).CurrentValues.SetValues(item);
+            db.Entry(album).State = EntityState.Modified;
+            db.SaveChanges();
         }
     }
 }
